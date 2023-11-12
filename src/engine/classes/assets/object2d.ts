@@ -1,30 +1,30 @@
 import { Vector2 } from "../..";
 
-export class Node2 extends Vector2{
-    id: number;
-    conects: number[];
+export class Node2 {
+  conects: number[];
+  position: Vector2;
 
-    constructor(x: number, y: number, id: number, conects: number[]){
-        super(x, y);
-        this.id = id;
-        this.conects = conects;
-    }
+  constructor(x: number, y: number, conects: number[]) {
+    this.position = new Vector2(x, y);
+    this.conects = conects;
+  }
 }
 
 type Object2dParams = {
-    position: Vector2;
-    nodes: Node2[];
-}
+  position: Vector2;
+  nodes: Node2[];
+  color: string;
+};
 
-export abstract class Object2d{
-    position: Vector2;
-    nodes: Node2[];
-    abstract onFrame(delta: number): void;
+export abstract class Object2d {
+  position: Vector2;
+  nodes: Node2[];
+  color: string;
+  abstract onFrame(delta: number): void;
 
-    constructor({ position, nodes }: Object2dParams){
-        this.position = position;
-        this.nodes = nodes;
-    }
-
-    
+  constructor({ position, nodes, color }: Object2dParams) {
+    this.position = position;
+    this.nodes = nodes;
+    this.color = color;
+  }
 }

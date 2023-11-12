@@ -8,9 +8,10 @@ export default class Vector2 {
   }
 
   static translate(vec1: Vector2, vec2: Vector2): Vector2 {
-    vec1.x += vec2.x;
-    vec1.y += vec2.y;
-    return vec1;
+    const vec = vec1.clone();
+    vec.x += vec2.x;
+    vec.y += vec2.y;
+    return vec;
   }
 
   translate(vec: Vector2): Vector2 {
