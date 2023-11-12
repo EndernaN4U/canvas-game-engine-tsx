@@ -1,19 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 type CanvasProps = {
-    children?: JSX.Element | JSX.Element[];
+  children?: JSX.Element | JSX.Element[];
 };
 
 export default function Canvas({ children }: CanvasProps) {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-    useEffect(() => {
+  useEffect(() => {}, []);
 
-    }, [])
-    
-    return (
-      <canvas ref={canvasRef}>
-        {children}
-      </canvas>
-    );
+  return <canvas ref={canvasRef}>{children}</canvas>;
 }
