@@ -23,7 +23,7 @@ export default class Vector3 {
     return this;
   }
 
-  copy(): Vector3 {
+  clone(): Vector3 {
     return new Vector3(this.x, this.y, this.z);
   }
 }
