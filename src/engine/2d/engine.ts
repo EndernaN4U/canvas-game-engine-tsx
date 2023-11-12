@@ -29,7 +29,7 @@ export class Engine2d extends EngineBase {
 
           const destPosition = Vector2.translate(
             gameObject.position,
-            gameObject.nodes[destNode].position
+            gameObject.nodes[destNode].position,
           );
 
           this.ctx.lineTo(destPosition.x, destPosition.y);

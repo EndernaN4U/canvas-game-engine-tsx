@@ -16,7 +16,7 @@ export default function Canvas({ children, dim }: CanvasProps) {
       setEngine(
         dim == "2d"
           ? new Engine2d(canvasRef.current)
-          : new Engine3d(canvasRef.current)
+          : new Engine3d(canvasRef.current),
       );
   }, [dim]);
   engine?.draw();
