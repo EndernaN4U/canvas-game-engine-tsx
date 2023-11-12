@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
 
 type CanvasProps = {
-  children?: JSX.Element | JSX.Element[];
+  dim: '2d' | '3d',
+  children?: JSX.Element | JSX.Element[]
 };
 
 export default function Canvas({ children }: CanvasProps) {
