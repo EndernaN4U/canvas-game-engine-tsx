@@ -12,12 +12,13 @@ export default function Canvas({ children, dim }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [engine, setEngine] = useState<EngineBase>();
   useEffect(() => {
-    if (canvasRef.current)
+    if (canvasRef.current) {
       setEngine(
         dim == "2d"
-          ? new Engine2d(canvasRef.current)
-          : new Engine3d(canvasRef.current),
+          ? new Engine2d(canvasRef.current, "#333333")
+          : new Engine3d(canvasRef.current)
       );
+    }
   }, [dim]);
   engine?.draw();
   return <canvas ref={canvasRef}>{children}</canvas>;

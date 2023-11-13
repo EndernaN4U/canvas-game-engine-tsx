@@ -5,15 +5,24 @@ import { Node2, Object2d } from "../classes/assets";
 
 export class Engine2d extends EngineBase {
   objects: Object2d[];
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
+  constructor(
+    canvas: HTMLCanvasElement,
+    backgroundColor: string | undefined = undefined
+  ) {
+    super(canvas, backgroundColor);
     this.objects = [
-      new TestEnemy(0, new Vector2(20, 20), [
-        new Node2(0, 0, [1]),
-        new Node2(100, 0, [2]),
-        new Node2(100, 100, [3]),
-        new Node2(0, 100, [0]),
-      ]),
+      new TestEnemy(
+        0,
+        new Vector2(100, 20),
+        [
+          new Node2(0, 0, [1]),
+          new Node2(100, 0, [2]),
+          new Node2(100, 100, [3]),
+          new Node2(0, 100, [0]),
+        ],
+        0.5,
+        45
+      ),
     ];
   }
   draw(): void {
@@ -21,15 +30,14 @@ export class Engine2d extends EngineBase {
       gameObject.nodes.forEach((node) => {
         this.ctx.strokeStyle = gameObject.color;
 
-        const nodeStart = Vector2.translate(gameObject.position, node.position);
+        const nodeStart = gameObject.getAbsolutePosition(node);
 
         node.conects.forEach((destNode) => {
           this.ctx.beginPath();
           this.ctx.moveTo(nodeStart.x, nodeStart.y);
 
-          const destPosition = Vector2.translate(
-            gameObject.position,
-            gameObject.nodes[destNode].position,
+          const destPosition = gameObject.getAbsolutePosition(
+            gameObject.nodes[destNode]
           );
 
           this.ctx.lineTo(destPosition.x, destPosition.y);
