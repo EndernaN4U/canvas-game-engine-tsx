@@ -5,8 +5,11 @@ import { Node2, Object2d } from "../classes/assets";
 
 export class Engine2d extends EngineBase {
   objects: Object2d[];
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
+  constructor(
+    canvas: HTMLCanvasElement,
+    backgroundColor: string | undefined = undefined
+  ) {
+    super(canvas, backgroundColor);
     this.objects = [
       new TestEnemy(0, new Vector2(20, 20), [
         new Node2(0, 0, [1]),
@@ -29,7 +32,7 @@ export class Engine2d extends EngineBase {
 
           const destPosition = Vector2.translate(
             gameObject.position,
-            gameObject.nodes[destNode].position,
+            gameObject.nodes[destNode].position
           );
 
           this.ctx.lineTo(destPosition.x, destPosition.y);
