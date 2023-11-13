@@ -34,7 +34,7 @@ export default class Vector2 {
     deg %= 360;
     const rad = (deg * 2 * Math.PI) / 360;
     const newX = Math.cos(rad) * this.x - Math.sin(rad) * this.y;
-    this.y = Math.sin(rad) * this.x - Math.cos(rad) * this.y;
+    this.y = Math.sin(rad) * this.x + Math.cos(rad) * this.y;
     this.x = newX;
     return this;
   }
