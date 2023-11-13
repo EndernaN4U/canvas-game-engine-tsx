@@ -16,6 +16,6 @@ export class TestEnemy extends Object2d {
   }
 
   onFrame(delta: number): void {
-    console.log(`Tata pije i bije hehe (${3600 / delta} razy)`);
+    this.rotation += (360 * delta) / 1000;
   }
 }
