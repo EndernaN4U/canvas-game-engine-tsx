@@ -24,6 +24,26 @@ export default class Vector3 {
     return this;
   }
 
+  multiplyBy(mult: number): Vector3 {
+    this.x *= mult;
+    this.y *= mult;
+    return this;
+  }
+  /**
+   * Uses formula found on https://matthew-brett.github.io/teaching/rotation_2d.html
+   * @param deg number representing degrees vector will be rotated by in the Y axis.
+   * @returns this (Vector2)
+   */
+  rotateY(deg: number): Vector3 {
+    // TODO test this code pls
+    deg %= 360;
+    const rad = (deg * 2 * Math.PI) / 360;
+    const newX = Math.cos(rad) * this.x - Math.sin(rad) * this.z;
+    this.z = Math.sin(rad) * this.x - Math.cos(rad) * this.z;
+    this.x = newX;
+    return this;
+  }
+
   clone(): Vector3 {
     return new Vector3(this.x, this.y, this.z);
   }

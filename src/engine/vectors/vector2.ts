@@ -20,6 +20,25 @@ export default class Vector2 {
     return this;
   }
 
+  multiplyBy(mult: number): Vector2 {
+    this.x *= mult;
+    this.y *= mult;
+    return this;
+  }
+  /**
+   * Uses formula found on https://matthew-brett.github.io/teaching/rotation_2d.html
+   * @param deg number representing degrees vector will be rotated by.
+   * @returns this (Vector2)
+   */
+  rotateBy(deg: number): Vector2 {
+    deg %= 360;
+    const rad = (deg * 2 * Math.PI) / 360;
+    const newX = Math.cos(rad) * this.x - Math.sin(rad) * this.y;
+    this.y = Math.sin(rad) * this.x - Math.cos(rad) * this.y;
+    this.x = newX;
+    return this;
+  }
+
   clone(): Vector2 {
     return new Vector2(this.x, this.y);
   }
