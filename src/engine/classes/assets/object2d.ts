@@ -1,4 +1,5 @@
 import { Vector2 } from "../..";
+import BaseObject from "./baseObject";
 
 export class Node2 {
   conects: number[];
@@ -18,7 +19,7 @@ type Object2dParams = {
   rotation: number;
 };
 
-export abstract class Object2d {
+export abstract class Object2d implements BaseObject {
   position: Vector2;
   nodes: Node2[];
   color: string;
@@ -45,7 +46,7 @@ export abstract class Object2d {
   /**
    * Transforms a node with relative position (Vector2) into vector based on 0, 0 (absolute position)
    * @param node node to be transfomed.
-   * @reaturns new instance of Vector2 representing absolute coordinates
+   * @returns new instance of Vector2 representing absolute coordinates
    */
   getAbsolutePosition(node: Node2): Vector2 {
     return node.position

@@ -1,30 +1,27 @@
-import { Vector2 } from "..";
-import { TestEnemy } from "../../tests/enemy";
 import { EngineBase } from "../classes";
-import { Node2, Object2d } from "../classes/assets";
+import { Object2d } from "../classes/assets";
 
 export class Engine2d extends EngineBase {
   objects: Object2d[];
   constructor(
     canvas: HTMLCanvasElement,
-    backgroundColor: string | undefined = undefined
+    backgroundColor: string | undefined = undefined,
+    objects: Object2d[] = []
   ) {
     super(canvas, backgroundColor);
-    this.objects = [
-      new TestEnemy(
-        0,
-        new Vector2(100, 20),
-        [
-          new Node2(0, 0, [1]),
-          new Node2(100, 0, [2]),
-          new Node2(100, 100, [3]),
-          new Node2(0, 100, [0]),
-        ],
-        0.5,
-        45
-      ),
-    ];
+    this.objects = objects;
   }
+  onFrame(delta: number): void {
+    this.objects.forEach((obj) => {
+      obj.onFrame(delta);
+    });
+    console.log("frame");
+  }
+
+  addObject(object: Object2d) {
+    this.objects.push(object);
+  }
+
   draw(): void {
     this.objects.forEach((gameObject) => {
       gameObject.nodes.forEach((node) => {
