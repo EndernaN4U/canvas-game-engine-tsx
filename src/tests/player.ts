@@ -9,7 +9,7 @@ type PlayerParams = {
     onFrameCall: (delta: number, dis: Player)=>void;
 }
 
-class Player extends Object2d{
+export class Player extends Object2d{
     hp: number;
     atck: number;
     tick: number;
@@ -20,14 +20,14 @@ class Player extends Object2d{
         this.hp = hp;
         this.atck = atck;
         this.tick = 0;
-        this.onFrameCall = onFrameCall;
+        this.onFrameCall = onFrameCall;      
     }
     onFrame(delta: number): void {
         this.onFrameCall(delta, this);
     }
 }
 
-export const playerObj = new Player({
+export const forplayerobj = {
     hp: 100,
     atck: 2.5,
     position: new Vector2(50, 50),
@@ -39,7 +39,8 @@ export const playerObj = new Player({
     ],
     onFrameCall: (delta: number, dis: Player)=>{
         dis.rotation += (360 * delta) / 10000;
-        dis.position.x += Math.sin(dis.tick / 100);
+        // dis.position.x += 5*Math.sin(dis.tick / 100);
+        // dis.position.y += 1.5*Math.sin(dis.tick / 100);
         dis.tick++;
     }
-})
+}

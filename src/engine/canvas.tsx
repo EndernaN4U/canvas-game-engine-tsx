@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { EngineBase } from ".";
 
 type CanvasProps = {
@@ -9,12 +9,37 @@ type CanvasProps = {
 
 export default function Canvas({ children, engine, background }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(()=>{
-    if(canvasRef.current) {
+
+  const [canvasSize, setCanvasSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  const resize = () => {
+    setCanvasSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
+  useEffect(() => {
+    if (canvasRef.current) {
       engine.setCanvas(canvasRef.current, background);
       engine.start();
-    };
-  },[])
+    }
 
-  return <canvas ref={canvasRef}>{children}</canvas>;
+    window.addEventListener("resize", resize);
+
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  return (
+    <canvas
+    ref={canvasRef}
+    width={canvasSize.width} 
+    height={canvasSize.height} 
+    style={{background}}>
+      {children}
+    </canvas>
+  );
 }
