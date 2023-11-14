@@ -1,14 +1,12 @@
 import { EngineBase } from "../classes";
 import { Object2d } from "../classes/assets";
 
-export class Engine2d extends EngineBase {
+export abstract class Engine2d extends EngineBase {
   objects: Object2d[];
   constructor(
-    canvas: HTMLCanvasElement,
-    backgroundColor: string | undefined = undefined,
     objects: Object2d[] = []
   ) {
-    super(canvas, backgroundColor);
+    super();
     this.objects = objects;
   }
   onFrame(delta: number): void {
