@@ -34,7 +34,11 @@ export default function Canvas({ children, engine, background }: CanvasProps) {
   }, []);
 
   return (
-    <canvas width={canvasSize.width} height={canvasSize.height} ref={canvasRef}>
+    <canvas
+    ref={canvasRef}
+    width={canvasSize.width} 
+    height={canvasSize.height} 
+    style={{background}}>
       {children}
     </canvas>
   );

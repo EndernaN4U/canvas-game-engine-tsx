@@ -13,8 +13,6 @@ export default function Test() {
   const engine = useRef(new Game()).current;
 
   return (
-    <div>
-      <Canvas engine={engine} background="#000"/>
-    </div>
+    <Canvas engine={engine} background="#000"/>
   );
 }
