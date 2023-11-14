@@ -17,8 +17,17 @@ abstract class EngineBase {
     this.clearCanvas();
     this.draw();
   }
+  
+  // Some default values
+  constructor(){
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext("2d")!;
+    this._running = false;
+    this._backgroundColor = "#000";
+  }
 
-  constructor(canvas: HTMLCanvasElement, backgroundColor: string = "#000") {
+  // Set canvas so it's not nessesary outside canvas.tsx
+  setCanvas(canvas: HTMLCanvasElement, backgroundColor: string = "#000"): void{
     this.canvas = canvas;
     const ctx = canvas.getContext("2d");
     if (ctx) this.ctx = ctx;

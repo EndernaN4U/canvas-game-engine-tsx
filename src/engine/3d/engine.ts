@@ -1,13 +1,10 @@
 import { EngineBase } from "../classes";
 import { Object3d } from "../classes/assets";
 
-export class Engine3d extends EngineBase {
+export abstract class Engine3d extends EngineBase {
   objects: Object3d[];
-  constructor(
-    canvas: HTMLCanvasElement,
-    backgroundColor: string | undefined = undefined
-  ) {
-    super(canvas, backgroundColor);
+  constructor() {
+    super();
     this.objects = [];
   }
   draw(): void {

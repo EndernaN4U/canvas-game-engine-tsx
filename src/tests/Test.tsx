@@ -1,17 +1,20 @@
-import React, { useEffect } from "react";
-import { Vector3 } from "../engine/vectors";
-import { Canvas } from "../engine";
+import React, { useEffect, useRef } from "react";
+import { Canvas, Engine2d } from "../engine";
+import { playerObj } from "./player";
+
+class Game extends Engine2d{
+  
+}
 
 export default function Test() {
+  const engine = useRef(new Game()).current;
   useEffect(() => {
-    const vec: Vector3 = new Vector3(1, 2, 3);
-    vec.translate(new Vector3(1, 2, 3));
-    console.log(vec);
+    engine.addObject(playerObj)
   }, []);
 
   return (
     <div>
-      <Canvas dim="2d"></Canvas>
+      <Canvas engine={engine} background="#000"/>
     </div>
   );
 }

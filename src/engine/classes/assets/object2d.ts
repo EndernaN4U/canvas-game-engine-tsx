@@ -13,10 +13,10 @@ export class Node2 {
 
 type Object2dParams = {
   position: Vector2;
-  nodes: Node2[];
-  color: string;
-  scale: number;
-  rotation: number;
+  nodes?: Node2[];
+  color?: string;
+  scale?: number;
+  rotation?: number;
 };
 
 export abstract class Object2d implements BaseObject {
