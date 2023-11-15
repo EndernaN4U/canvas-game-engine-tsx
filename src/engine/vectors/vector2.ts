@@ -7,6 +7,10 @@ export default class Vector2 {
     this.y = y;
   }
 
+  static between(start: Vector2, end: Vector2): Vector2 {
+    return new Vector2(end.x - start.x, end.y - start.y);
+  }
+
   static translate(vec1: Vector2, vec2: Vector2): Vector2 {
     const vec = vec1.clone();
     vec.x += vec2.x;

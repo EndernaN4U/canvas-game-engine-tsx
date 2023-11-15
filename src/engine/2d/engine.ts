@@ -3,9 +3,7 @@ import { Object2d } from "../classes/assets";
 
 export abstract class Engine2d extends EngineBase {
   objects: Object2d[];
-  constructor(
-    objects: Object2d[] = []
-  ) {
+  constructor(objects: Object2d[] = []) {
     super();
     this.objects = objects;
   }
@@ -13,7 +11,7 @@ export abstract class Engine2d extends EngineBase {
     this.objects.forEach((obj) => {
       obj.onFrame(delta);
     });
-    console.log("frame");
+    // console.log("frame");
   }
 
   addObject(object: Object2d) {
