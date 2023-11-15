@@ -2,45 +2,60 @@ import { Object2d, Node2 } from "../engine/classes/assets";
 import { Vector2 } from "../engine";
 
 type PlayerParams = {
-    hp: number;
-    atck: number;
-    position: Vector2;
-    nodes: Node2[];
-    onFrameCall: (delta: number, dis: Player)=>void;
-}
+  hp: number;
+  atck: number;
+  position: Vector2;
+  nodes: Node2[];
+  hitboxes: number[][];
+  onFrameCall: (delta: number, dis: Player) => void;
+};
 
-export class Player extends Object2d{
-    hp: number;
-    atck: number;
-    tick: number;
-    onFrameCall: (delta: number, dis: Player)=>void;
+export class Player extends Object2d {
+  hp: number;
+  atck: number;
+  tick: number;
+  onFrameCall: (delta: number, dis: Player) => void;
 
-    constructor({hp, atck, position, nodes, onFrameCall}: PlayerParams){
-        super({position, nodes});
-        this.hp = hp;
-        this.atck = atck;
-        this.tick = 0;
-        this.onFrameCall = onFrameCall;      
-    }
-    onFrame(delta: number): void {
-        this.onFrameCall(delta, this);
-    }
+  constructor({
+    hp,
+    atck,
+    position,
+    nodes,
+    hitboxes,
+    onFrameCall,
+  }: PlayerParams) {
+    super({ position, nodes, hitboxes });
+    this.hp = hp;
+    this.atck = atck;
+    this.tick = 0;
+    this.onFrameCall = onFrameCall;
+  }
+  onFrame(delta: number): void {
+    this.onFrameCall(delta, this);
+  }
 }
 
 export const forplayerobj = {
-    hp: 100,
-    atck: 2.5,
-    position: new Vector2(50, 50),
-    nodes: [
-        new Node2(-25, -25, [1]),
-        new Node2(25, -25, [2]),
-        new Node2(25, 25, [3]),
-        new Node2(-25, 25, [0]),
-    ],
-    onFrameCall: (delta: number, dis: Player)=>{
-        dis.rotation += (360 * delta) / 10000;
-        // dis.position.x += 5*Math.sin(dis.tick / 100);
-        // dis.position.y += 1.5*Math.sin(dis.tick / 100);
-        dis.tick++;
-    }
-}
+  hp: 100,
+  atck: 2.5,
+  position: new Vector2(50, 50),
+  nodes: [
+    new Node2(-25, -25, [1, 2]),
+    new Node2(25, -25, [2]),
+    new Node2(25, 25, [3]),
+    new Node2(-25, 25, [0]),
+  ],
+  hitboxes: [
+    [0, 1, 2],
+    [0, 2, 3],
+  ],
+  onFrameCall: (delta: number, dis: Player) => {
+    dis.rotation += (360 * delta) / 10000;
+    // dis.position.x += 5*Math.sin(dis.tick / 100);
+    // dis.position.y += 1.5*Math.sin(dis.tick / 100);
+    dis.tick++;
+    console.log(
+      dis.isInHitbox(new Vector2(dis.position.x + 30, dis.position.y))
+    );
+  },
+};
