@@ -40,10 +40,9 @@ export abstract class Object2d implements BaseObject {
   // Params for movement
 
   isMovable: boolean;
-  
-  speed?: number;
-  maxVelocity?: number;
-  velocity?: Vector2;
+  speed: number;
+  maxVelocity: number;
+  velocity: Vector2;
 
   private _hitboxes: number[][] = [];
 
@@ -71,11 +70,11 @@ export abstract class Object2d implements BaseObject {
     scale = 1,
     rotation = 0,
     hitboxes = [],
+    audioMap = new Map<string, HTMLAudioElement>(),
     isMovable = false,
     speed = 0,
     maxVelocity = 0,
     velocity = new Vector2(0,0),
-    audioMap = new Map<string, HTMLAudioElement>(),
   }: Object2dParams) {
     this.position = position;
     this.nodes = nodes;
@@ -87,12 +86,9 @@ export abstract class Object2d implements BaseObject {
     this.audioMap = audioMap;
 
     this.isMovable = isMovable;
-
-    if(isMovable){
-      this.speed = speed;
-      this.maxVelocity = maxVelocity;
-      this.velocity = velocity;
-    }
+    this.speed = speed;
+    this.maxVelocity = maxVelocity;
+    this.velocity = velocity;
   }
 
   /**

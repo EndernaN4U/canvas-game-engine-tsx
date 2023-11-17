@@ -6,6 +6,11 @@ class Game extends Engine2d {
   constructor() {
     super();
     this.addObject(player);
+
+    window.addEventListener("click", (e)=>{
+      if(player.isInHitbox(new Vector2(e.clientX, e.clientY)))
+        player.audioMap.get("freddy")?.play();
+    })
   }
 }
 

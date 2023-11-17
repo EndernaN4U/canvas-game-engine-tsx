@@ -10,12 +10,14 @@ type PlayerParams = {
   nodes: Node2[];
   hitboxes: number[][];
   audioMap: Map<string, HTMLAudioElement>;
+  speed: number;
 };
 
 class Player extends Object2d {
   hp: number;
   atck: number;
   tick: number;
+  keysSet: Set<string>;
 
   constructor({
     hp,
@@ -23,15 +25,32 @@ class Player extends Object2d {
     position,
     nodes,
     hitboxes,
-    audioMap
+    audioMap,
+    speed,
   }: PlayerParams) {
-    super({ position, nodes, hitboxes, audioMap });
+    super({ position, nodes, hitboxes, audioMap, isMovable: true, speed });
     this.hp = hp;
     this.atck = atck;
     this.tick = 0;
+
+    this.keysSet = new Set();
+
+    window.addEventListener("keypress", (e)=>{
+        this.keysSet.add(e.key);
+    })
+    window.addEventListener("keyup", (e)=>{
+        this.keysSet.delete(e.key);
+    })
   }
   onFrame(delta: number): void {
-    
+    // Very basic player movement
+    let x = 0, y = 0;
+    y -= this.keysSet.has("w") ? this.speed : 0;
+    y += this.keysSet.has("s") ? this.speed : 0;
+    x -= this.keysSet.has("a") ? this.speed : 0;
+    x += this.keysSet.has("d") ? this.speed : 0;
+
+    this.position.translate(new Vector2(x*delta, y*delta));
   }
 }
 
@@ -51,5 +70,6 @@ export const player = new Player({
   ],
   audioMap: new Map([
     ["freddy", new Audio(music)]
-  ])
+  ]),
+  speed: 1
 });
