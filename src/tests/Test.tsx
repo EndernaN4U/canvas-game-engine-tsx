@@ -1,20 +1,11 @@
 import React, { useRef } from "react";
 import { Canvas, Engine2d, Vector2 } from "../engine";
-import { forplayerobj, Player } from "./player";
+import { player } from "./player";
 
 class Game extends Engine2d {
   constructor() {
     super();
-    const cforplayer = { ...forplayerobj };
-    const newplayer = new Player(cforplayer);
-    this.addObject(newplayer);
-    window.addEventListener("mousedown", (e) => {
-      const cforplayer = { ...forplayerobj };
-      cforplayer.position = new Vector2(e.clientX, e.clientY);
-
-      const newplayer = new Player(cforplayer);
-      this.addObject(newplayer);
-    });
+    this.addObject(player);
   }
 }
 
