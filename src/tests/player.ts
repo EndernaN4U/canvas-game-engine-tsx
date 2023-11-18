@@ -1,20 +1,23 @@
 import { Object2d, Node2 } from "../engine/classes/assets";
 import { Vector2 } from "../engine";
 
+import music from "./audio/freddy.mp3";
+
 type PlayerParams = {
   hp: number;
   atck: number;
   position: Vector2;
   nodes: Node2[];
   hitboxes: number[][];
-  onFrameCall: (delta: number, dis: Player) => void;
+  audioMap: Map<string, HTMLAudioElement>;
+  speed: number;
 };
 
-export class Player extends Object2d {
+class Player extends Object2d {
   hp: number;
   atck: number;
   tick: number;
-  onFrameCall: (delta: number, dis: Player) => void;
+  keysSet: Set<string>;
 
   constructor({
     hp,
@@ -22,20 +25,36 @@ export class Player extends Object2d {
     position,
     nodes,
     hitboxes,
-    onFrameCall,
+    audioMap,
+    speed,
   }: PlayerParams) {
-    super({ position, nodes, hitboxes });
+    super({ position, nodes, hitboxes, audioMap, isMovable: true, speed });
     this.hp = hp;
     this.atck = atck;
     this.tick = 0;
-    this.onFrameCall = onFrameCall;
+
+    this.keysSet = new Set();
+
+    window.addEventListener("keypress", (e)=>{
+        this.keysSet.add(e.key);
+    })
+    window.addEventListener("keyup", (e)=>{
+        this.keysSet.delete(e.key);
+    })
   }
   onFrame(delta: number): void {
-    this.onFrameCall(delta, this);
+    // Very basic player movement
+    let x = 0, y = 0;
+    y -= this.keysSet.has("w") ? this.speed : 0;
+    y += this.keysSet.has("s") ? this.speed : 0;
+    x -= this.keysSet.has("a") ? this.speed : 0;
+    x += this.keysSet.has("d") ? this.speed : 0;
+
+    this.position.translate(new Vector2(x*delta, y*delta));
   }
 }
 
-export const forplayerobj = {
+export const player = new Player({
   hp: 100,
   atck: 2.5,
   position: new Vector2(50, 50),
@@ -49,13 +68,8 @@ export const forplayerobj = {
     [0, 1, 2],
     [0, 2, 3],
   ],
-  onFrameCall: (delta: number, dis: Player) => {
-    dis.rotation += (360 * delta) / 10000;
-    // dis.position.x += 5*Math.sin(dis.tick / 100);
-    // dis.position.y += 1.5*Math.sin(dis.tick / 100);
-    dis.tick++;
-    console.log(
-      dis.isInHitbox(new Vector2(dis.position.x + 30, dis.position.y))
-    );
-  },
-};
+  audioMap: new Map([
+    ["freddy", new Audio(music)]
+  ]),
+  speed: 1
+});

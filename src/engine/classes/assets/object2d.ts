@@ -19,7 +19,12 @@ type Object2dParams = {
   scale?: number;
   rotation?: number;
   hitboxes?: number[][];
-};
+  isMovable?: boolean;
+  speed?: number;
+  velocity?: Vector2;
+  maxVelocity?: number;
+  audioMap?: Map<string, HTMLAudioElement>;
+}
 
 export abstract class Object2d implements BaseObject {
   position: Vector2;
@@ -27,6 +32,18 @@ export abstract class Object2d implements BaseObject {
   color: string;
   scale: number;
   rotation: number;
+
+  // Audio map
+
+  audioMap: Map<string, HTMLAudioElement>;
+  
+  // Params for movement
+
+  isMovable: boolean;
+  speed: number;
+  maxVelocity: number;
+  velocity: Vector2;
+
   private _hitboxes: number[][] = [];
 
   public set hitboxes(hitboxes: number[][]) {
@@ -53,6 +70,11 @@ export abstract class Object2d implements BaseObject {
     scale = 1,
     rotation = 0,
     hitboxes = [],
+    audioMap = new Map<string, HTMLAudioElement>(),
+    isMovable = false,
+    speed = 0,
+    maxVelocity = 0,
+    velocity = new Vector2(0,0),
   }: Object2dParams) {
     this.position = position;
     this.nodes = nodes;
@@ -60,6 +82,13 @@ export abstract class Object2d implements BaseObject {
     this.scale = scale;
     this.rotation = rotation;
     this.hitboxes = hitboxes;
+
+    this.audioMap = audioMap;
+
+    this.isMovable = isMovable;
+    this.speed = speed;
+    this.maxVelocity = maxVelocity;
+    this.velocity = velocity;
   }
 
   /**

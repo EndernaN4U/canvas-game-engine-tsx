@@ -1,20 +1,16 @@
 import React, { useRef } from "react";
 import { Canvas, Engine2d, Vector2 } from "../engine";
-import { forplayerobj, Player } from "./player";
+import { player } from "./player";
 
 class Game extends Engine2d {
   constructor() {
     super();
-    const cforplayer = { ...forplayerobj };
-    const newplayer = new Player(cforplayer);
-    this.addObject(newplayer);
-    window.addEventListener("mousedown", (e) => {
-      const cforplayer = { ...forplayerobj };
-      cforplayer.position = new Vector2(e.clientX, e.clientY);
+    this.addObject(player);
 
-      const newplayer = new Player(cforplayer);
-      this.addObject(newplayer);
-    });
+    window.addEventListener("click", (e)=>{
+      if(player.isInHitbox(new Vector2(e.clientX, e.clientY)))
+        player.audioMap.get("freddy")?.play();
+    })
   }
 }
 
