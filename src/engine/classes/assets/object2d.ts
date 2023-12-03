@@ -91,6 +91,26 @@ export abstract class Object2d implements BaseObject {
     this.velocity = velocity;
   }
 
+  draw(ctx: CanvasRenderingContext2D): void {
+    this.nodes.forEach((node) => {  
+      ctx.strokeStyle = this.color;
+
+      const nodeStart = this.getAbsolutePosition(node);
+
+      node.conects.forEach((destNode) => {
+        ctx.beginPath();
+        ctx.moveTo(nodeStart.x, nodeStart.y);
+
+        const destPosition = this.getAbsolutePosition(
+          this.nodes[destNode]
+        );
+
+        ctx.lineTo(destPosition.x, destPosition.y);
+        ctx.stroke();
+      });
+    });
+  }
+
   /**
    * Transforms a node with relative position (Vector2) into vector based on 0, 0 (absolute position)
    * @param node node to be transfomed.

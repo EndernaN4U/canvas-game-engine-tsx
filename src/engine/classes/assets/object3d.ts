@@ -40,6 +40,10 @@ export abstract class Object3d implements BaseObject {
     this.rotationY = rotationY;
   }
 
+  draw(ctx: CanvasRenderingContext2D): void {
+    
+  }
+
   /**
    * Transforms a node with relative position (Vector2) into vector based on 0, 0 (absolute position)
    * @param node node to be transfomed.
