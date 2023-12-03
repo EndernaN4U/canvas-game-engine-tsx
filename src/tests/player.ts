@@ -2,6 +2,7 @@ import { Object2d, Node2 } from "../engine/classes/assets";
 import { Vector2 } from "../engine";
 
 import music from "./audio/freddy.mp3";
+import Bullet from "./bullet";
 
 type PlayerParams = {
   hp: number;
@@ -18,6 +19,7 @@ class Player extends Object2d {
   atck: number;
   tick: number;
   keysSet: Set<string>;
+  bullets: Array<Bullet>
 
   constructor({
     hp,
@@ -34,9 +36,11 @@ class Player extends Object2d {
     this.tick = 0;
 
     this.keysSet = new Set();
+    this.bullets = [];
 
     window.addEventListener("keypress", (e)=>{
         this.keysSet.add(e.key);
+        if(e.key == " ") this.bullets.push(new Bullet(this.position.clone()));
     })
     window.addEventListener("keyup", (e)=>{
         this.keysSet.delete(e.key);
@@ -50,7 +54,16 @@ class Player extends Object2d {
     x -= this.keysSet.has("a") ? this.speed : 0;
     x += this.keysSet.has("d") ? this.speed : 0;
 
+    this.bullets = this.bullets.filter(x=>x.position.x < 1920);
+    this.bullets.forEach((bullet)=>bullet.onFrame(delta));
+
     this.position.translate(new Vector2(x*delta, y*delta));
+  }
+  draw(ctx: CanvasRenderingContext2D): void {
+    super.draw(ctx);
+    this.bullets.forEach((bullet)=>{
+      bullet.draw(ctx);
+    })
   }
 }
 
