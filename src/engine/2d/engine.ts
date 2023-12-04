@@ -20,23 +20,7 @@ export abstract class Engine2d extends EngineBase {
 
   draw(): void {
     this.objects.forEach((gameObject) => {
-      gameObject.nodes.forEach((node) => {
-        this.ctx.strokeStyle = gameObject.color;
-
-        const nodeStart = gameObject.getAbsolutePosition(node);
-
-        node.conects.forEach((destNode) => {
-          this.ctx.beginPath();
-          this.ctx.moveTo(nodeStart.x, nodeStart.y);
-
-          const destPosition = gameObject.getAbsolutePosition(
-            gameObject.nodes[destNode]
-          );
-
-          this.ctx.lineTo(destPosition.x, destPosition.y);
-          this.ctx.stroke();
-        });
-      });
+      gameObject.draw(this.ctx);
     });
   }
 }
