@@ -16,12 +16,16 @@ export default class Vector3 {
     vec.z += vec2.z;
     return vec;
   }
-
+  
   translate(vec: Vector3): Vector3 {
     this.x += vec.x;
     this.y += vec.y;
     this.z += vec.z;
     return this;
+  }
+
+  static between(start: Vector3, end: Vector3): Vector3 {
+    return new Vector3(end.x - start.x, end.y - start.y, end.z - start.z);
   }
 
   multiplyBy(mult: number): Vector3 {

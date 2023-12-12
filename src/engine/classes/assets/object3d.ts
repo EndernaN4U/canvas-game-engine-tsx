@@ -1,5 +1,6 @@
 import { Vector3 } from "../..";
 import BaseObject from "./baseObject";
+import { CameraObject3D } from "./cameraObject";
 
 export class Node3 {
   conects: number[];
@@ -16,6 +17,8 @@ type Object3dParams = {
   color: string;
   scale: number;
   rotationY: number;
+  rotationX: number;
+  rotationZ: number;
 };
 
 export abstract class Object3d implements BaseObject {
@@ -24,6 +27,8 @@ export abstract class Object3d implements BaseObject {
   color: string;
   scale: number;
   rotationY: number;
+  rotationX: number;
+  rotationZ: number;
   abstract onFrame(delta: number): void;
 
   constructor({
@@ -32,16 +37,25 @@ export abstract class Object3d implements BaseObject {
     color = "#fff",
     scale = 1,
     rotationY = 0,
+    rotationX = 0,
+    rotationZ = 0,
   }: Object3dParams) {
     this.position = position;
     this.nodes = nodes;
     this.color = color;
     this.scale = scale;
     this.rotationY = rotationY;
+    this.rotationX = rotationX;
+    this.rotationZ = rotationZ;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
-    
+  draw(ctx: CanvasRenderingContext2D, camera: CameraObject3D ): void {
+    this.nodes.forEach(node => {
+      const absPos = this.getAbsolutePosition(node);
+      const cameraPos = camera.position;
+      const vec = Vector3.between(cameraPos, absPos);
+      
+    })
   }
 
   /**
