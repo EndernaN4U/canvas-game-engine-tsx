@@ -13,12 +13,10 @@ export class Node3 {
 
 type Object3dParams = {
   position: Vector3;
-  nodes: Node3[];
-  color: string;
-  scale: number;
-  rotationY: number;
-  rotationX: number;
-  rotationZ: number;
+  nodes?: Node3[];
+  color?: string;
+  scale?: number;
+  rotation?: Vector3;
 };
 
 export abstract class Object3d implements BaseObject {
@@ -26,27 +24,21 @@ export abstract class Object3d implements BaseObject {
   nodes: Node3[];
   color: string;
   scale: number;
-  rotationY: number;
-  rotationX: number;
-  rotationZ: number;
+  rotation: Vector3;
   abstract onFrame(delta: number): void;
 
   constructor({
     position,
-    nodes,
+    nodes = [],
     color = "#fff",
     scale = 1,
-    rotationY = 0,
-    rotationX = 0,
-    rotationZ = 0,
+    rotation = new Vector3(0,0,0),
   }: Object3dParams) {
     this.position = position;
     this.nodes = nodes;
     this.color = color;
     this.scale = scale;
-    this.rotationY = rotationY;
-    this.rotationX = rotationX;
-    this.rotationZ = rotationZ;
+    this.rotation = rotation;
   }
 
   draw(ctx: CanvasRenderingContext2D, camera: CameraObject3D ): void {
@@ -54,7 +46,7 @@ export abstract class Object3d implements BaseObject {
       const absPos = this.getAbsolutePosition(node);
       const cameraPos = camera.position;
       const vec = Vector3.between(cameraPos, absPos);
-      
+
     })
   }
 
@@ -67,7 +59,7 @@ export abstract class Object3d implements BaseObject {
     return node.position
       .clone()
       .multiplyBy(this.scale)
-      .rotateY(this.rotationY)
+      .rotateY(this.rotation.y)
       .translate(this.position);
   }
 }
