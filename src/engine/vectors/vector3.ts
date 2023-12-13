@@ -1,3 +1,6 @@
+import { Vector2 } from ".";
+import { CameraObject3D } from "../classes/assets/cameraObject";
+
 export default class Vector3 {
   x: number;
   y: number;
@@ -46,6 +49,15 @@ export default class Vector3 {
     this.z = Math.sin(rad) * this.x + Math.cos(rad) * this.z;
     this.x = newX;
     return this;
+  }
+
+  project(camera: CameraObject3D): Vector2{
+    const size = camera.screenSize;
+    const [x, y] = [
+      size.x / 2 + (camera.FOV * this.x) / (camera.FOV + this.z) * 100,
+      size.y / 2 + (camera.FOV * this.y) / (camera.FOV + this.z) * 100,
+    ]
+    return new Vector2(x,y);
   }
 
   clone(): Vector3 {

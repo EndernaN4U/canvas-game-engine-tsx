@@ -1,4 +1,4 @@
-import { Vector3 } from "..";
+import { Vector2, Vector3 } from "..";
 import { EngineBase } from "../classes";
 import { Object3d } from "../classes/assets";
 import { CameraObject3D } from "../classes/assets/cameraObject";
@@ -10,7 +10,9 @@ export abstract class Engine3d extends EngineBase {
     super();
     this.objects = [];
     this.camera = new CameraObject3D({
-      position: new Vector3(0,0,0)
+      position: new Vector3(0,0,0),
+      FOV: 70,
+      screenSize: new Vector2(this.canvas.width, this.canvas.height)
     });
   }
   draw(): void {

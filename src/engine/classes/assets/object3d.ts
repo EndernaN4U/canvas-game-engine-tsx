@@ -1,3 +1,4 @@
+import { Node2 } from ".";
 import { Vector3 } from "../..";
 import BaseObject from "./baseObject";
 import { CameraObject3D } from "./cameraObject";
@@ -42,12 +43,28 @@ export abstract class Object3d implements BaseObject {
   }
 
   draw(ctx: CanvasRenderingContext2D, camera: CameraObject3D ): void {
-    this.nodes.forEach(node => {
-      const absPos = this.getAbsolutePosition(node);
-      const cameraPos = camera.position;
-      const vec = Vector3.between(cameraPos, absPos);
+    const nodes2d = this.nodes.map(node => { 
+      const abs = this.getAbsolutePosition(node);
 
+      const vec = abs.project(camera);
+      const node2d = new Node2(vec.x, vec.y, node.conects);
+      return node2d;
     })
+
+    nodes2d.forEach((node) => {  
+      ctx.strokeStyle = this.color;
+
+
+      node.conects.forEach((destNode) => {
+        ctx.beginPath();
+        ctx.moveTo(node.position.x, node.position.y);
+
+        const destPosition = nodes2d[destNode].position;
+
+        ctx.lineTo(destPosition.x, destPosition.y);
+        ctx.stroke();
+      });
+    });
   }
 
   /**
