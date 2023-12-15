@@ -10,14 +10,17 @@ export abstract class Engine3d extends EngineBase {
     super();
     this.objects = [];
     this.camera = new CameraObject3D({
-      position: new Vector3(0,0,0),
-      FOV: 70,
-      screenSize: new Vector2(this.canvas.width, this.canvas.height)
+      position: new Vector3(0, 0, 0),
+      FOV: 20,
+      screenSize: new Vector2(this.canvas.width, this.canvas.height),
     });
   }
   draw(): void {
     this.objects.forEach((gameObject) => {
       gameObject.draw(this.ctx, this.camera);
     });
+  }
+  onFrame(delta: number): void {
+    this.objects.forEach((obj) => obj.onFrame(delta));
   }
 }

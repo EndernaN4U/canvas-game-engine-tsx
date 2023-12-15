@@ -12,7 +12,7 @@ export class Node3 {
   }
 }
 
-type Object3dParams = {
+export type Object3dParams = {
   position: Vector3;
   nodes?: Node3[];
   color?: string;
@@ -33,7 +33,7 @@ export abstract class Object3d implements BaseObject {
     nodes = [],
     color = "#fff",
     scale = 1,
-    rotation = new Vector3(0,0,0),
+    rotation = new Vector3(0, 0, 0),
   }: Object3dParams) {
     this.position = position;
     this.nodes = nodes;
@@ -42,18 +42,17 @@ export abstract class Object3d implements BaseObject {
     this.rotation = rotation;
   }
 
-  draw(ctx: CanvasRenderingContext2D, camera: CameraObject3D ): void {
-    const nodes2d = this.nodes.map(node => { 
+  draw(ctx: CanvasRenderingContext2D, camera: CameraObject3D): void {
+    const nodes2d = this.nodes.map((node) => {
       const abs = this.getAbsolutePosition(node);
 
       const vec = abs.project(camera);
       const node2d = new Node2(vec.x, vec.y, node.conects);
       return node2d;
-    })
+    });
 
-    nodes2d.forEach((node) => {  
+    nodes2d.forEach((node) => {
       ctx.strokeStyle = this.color;
-
 
       node.conects.forEach((destNode) => {
         ctx.beginPath();
@@ -76,7 +75,7 @@ export abstract class Object3d implements BaseObject {
     return node.position
       .clone()
       .multiplyBy(this.scale)
-      .rotateY(this.rotation.y)
+      .rotate(this.rotation)
       .translate(this.position);
   }
 }
