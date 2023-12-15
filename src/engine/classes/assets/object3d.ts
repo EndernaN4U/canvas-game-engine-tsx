@@ -1,5 +1,7 @@
+import { Node2 } from ".";
 import { Vector3 } from "../..";
 import BaseObject from "./baseObject";
+import { CameraObject3D } from "./cameraObject";
 
 export class Node3 {
   conects: number[];
@@ -10,12 +12,12 @@ export class Node3 {
   }
 }
 
-type Object3dParams = {
+export type Object3dParams = {
   position: Vector3;
-  nodes: Node3[];
-  color: string;
-  scale: number;
-  rotationY: number;
+  nodes?: Node3[];
+  color?: string;
+  scale?: number;
+  rotation?: Vector3;
 };
 
 export abstract class Object3d implements BaseObject {
@@ -23,25 +25,45 @@ export abstract class Object3d implements BaseObject {
   nodes: Node3[];
   color: string;
   scale: number;
-  rotationY: number;
+  rotation: Vector3;
   abstract onFrame(delta: number): void;
 
   constructor({
     position,
-    nodes,
+    nodes = [],
     color = "#fff",
     scale = 1,
-    rotationY = 0,
+    rotation = new Vector3(0, 0, 0),
   }: Object3dParams) {
     this.position = position;
     this.nodes = nodes;
     this.color = color;
     this.scale = scale;
-    this.rotationY = rotationY;
+    this.rotation = rotation;
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
-    
+  draw(ctx: CanvasRenderingContext2D, camera: CameraObject3D): void {
+    const nodes2d = this.nodes.map((node) => {
+      const abs = this.getAbsolutePosition(node);
+
+      const vec = abs.project(camera);
+      const node2d = new Node2(vec.x, vec.y, node.conects);
+      return node2d;
+    });
+
+    nodes2d.forEach((node) => {
+      ctx.strokeStyle = this.color;
+
+      node.conects.forEach((destNode) => {
+        ctx.beginPath();
+        ctx.moveTo(node.position.x, node.position.y);
+
+        const destPosition = nodes2d[destNode].position;
+
+        ctx.lineTo(destPosition.x, destPosition.y);
+        ctx.stroke();
+      });
+    });
   }
 
   /**
@@ -53,7 +75,7 @@ export abstract class Object3d implements BaseObject {
     return node.position
       .clone()
       .multiplyBy(this.scale)
-      .rotateY(this.rotationY)
+      .rotate(this.rotation)
       .translate(this.position);
   }
 }
