@@ -19,7 +19,7 @@ export default class Vector3 {
     vec.z += vec2.z;
     return vec;
   }
-  
+
   translate(vec: Vector3): Vector3 {
     this.x += vec.x;
     this.y += vec.y;
@@ -36,13 +36,13 @@ export default class Vector3 {
     this.y *= mult;
     return this;
   }
+
   /**
-   * Uses formula found on https://matthew-brett.github.io/teaching/rotation_2d.html
-   * @param deg number representing degrees vector will be rotated by in the Y axis.
-   * @returns this (Vector2)
+   * Uses simplyfied rotation matrix multiplication to rotate vector in Y axis
+   * @param {number} deg number representing degrees vector will be rotated by in the Y axis.
+   * @returns {Vector3} this
    */
   rotateY(deg: number): Vector3 {
-    // TODO test this code pls
     deg %= 360;
     const rad = (deg * 2 * Math.PI) / 360;
     const newX = Math.cos(rad) * this.x - Math.sin(rad) * this.z;
@@ -51,13 +51,55 @@ export default class Vector3 {
     return this;
   }
 
-  project(camera: CameraObject3D): Vector2{
+  /**
+   * Uses simplyfied rotation matrix multiplication to rotate vector in X axis
+   * @param {number} deg number representing degrees vector will be rotated by in the X axis.
+   * @returns {Vector3} this
+   */
+  rotateX(deg: number): Vector3 {
+    deg %= 360;
+    const rad = (deg * 2 * Math.PI) / 360;
+    const newY = this.y * Math.cos(rad) - this.z * Math.sin(rad);
+    this.z = this.y * Math.sin(rad) + this.z * Math.cos(rad);
+    this.y = newY;
+    return this;
+  }
+
+  /**
+   * Uses simplyfied rotation matrix multiplication to rotate vector in Z axis
+   * @param {number} deg number representing degrees vector will be rotated by in the Z axis.
+   * @returns {Vector3} this
+   */
+  rotateZ(deg: number): Vector3 {
+    deg %= 360;
+    const rad = (deg * 2 * Math.PI) / 360;
+    const newX = Math.cos(rad) * this.x - Math.sin(rad) * this.y;
+    this.y = Math.sin(rad) * this.x + Math.cos(rad) * this.y;
+    this.x = newX;
+    return this;
+  }
+  /**
+   * Uses simplyfied rotation matrix multiplication to rotate vector in 3 axis represented as Vector3
+   * @param {Vector3} rotation Vector representing rotaion in 3 axis in degrees
+   * @returns {Vector3} this
+   */
+  rotate(rotation: Vector3): Vector3 {
+    this.rotateX(rotation.x);
+    this.rotateY(rotation.y);
+    this.rotateZ(rotation.z);
+    return this;
+  }
+
+  project(camera: CameraObject3D): Vector2 {
     const size = camera.screenSize;
+    const relativeToCam = Vector3.between(camera.position, this);
     const [x, y] = [
-      size.x / 2 + (camera.FOV * this.x) / (camera.FOV + this.z) * 100,
-      size.y / 2 + (camera.FOV * this.y) / (camera.FOV + this.z) * 100,
-    ]
-    return new Vector2(x,y);
+      size.x / 2 +
+        ((camera.FOV * relativeToCam.x) / (camera.FOV + relativeToCam.z)) * 100,
+      size.y / 2 +
+        ((camera.FOV * relativeToCam.y) / (camera.FOV + relativeToCam.z)) * 100,
+    ];
+    return new Vector2(x, y);
   }
 
   clone(): Vector3 {
