@@ -2,13 +2,20 @@ import { Vector2 } from "../..";
 import { crossProduct2D } from "../../functions/crossProduct";
 import BaseObject from "./baseObject";
 
+export type Connection = {
+  id: number;
+  color?: string;
+};
+
 export class Node2 {
-  conects: number[];
+  conects: Connection[];
   position: Vector2;
 
-  constructor(x: number, y: number, conects: number[]) {
+  constructor(x: number, y: number, conects: Array<Connection | number>= []) {
     this.position = new Vector2(x, y);
-    this.conects = conects;
+    
+    // Change every connect into Connection type
+    this.conects = conects.map(x => typeof x === "number" ? {id: x} : x);
   }
 }
 
@@ -93,16 +100,17 @@ export abstract class Object2d implements BaseObject {
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.nodes.forEach((node) => {  
-      ctx.strokeStyle = this.color;
-
+      
       const nodeStart = this.getAbsolutePosition(node);
-
+      
       node.conects.forEach((destNode) => {
+        ctx.strokeStyle = destNode.color || this.color;
+        
         ctx.beginPath();
         ctx.moveTo(nodeStart.x, nodeStart.y);
 
         const destPosition = this.getAbsolutePosition(
-          this.nodes[destNode]
+          this.nodes[destNode.id]
         );
 
         ctx.lineTo(destPosition.x, destPosition.y);
