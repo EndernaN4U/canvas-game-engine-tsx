@@ -14,11 +14,11 @@ class Level extends Object2d{
                 new Node2(50, 50, [1, 3]),
                 new Node2(50, -50),
             ]
-        });
+        });  
     }
 
     onFrame(delta: number): void {
-        
+
     }
 }
 

@@ -7,7 +7,7 @@ class TempestGame extends Engine2d{
     screenSize: Vector2;
     constructor(){
         super();
-        this.screenSize = new Vector2(this.canvas.width, this.canvas.height);
+        this.screenSize = new Vector2(window.innerWidth, window.innerHeight);
 
         this.addObject(new Level(this.screenSize));
     }
