@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { EngineBase } from ".";
 
 type CanvasProps = {
-  children?: JSX.Element | JSX.Element[];
   engine: EngineBase;
-  background: string;
+  children?: JSX.Element | JSX.Element[];
+  background?: string;
 };
 
 export default function Canvas({ children, engine, background }: CanvasProps) {
