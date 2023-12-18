@@ -12,7 +12,7 @@ export class Node2 {
   }
 }
 
-type Object2dParams = {
+export type Object2dParams = {
   position: Vector2;
   nodes?: Node2[];
   color?: string;
@@ -24,7 +24,7 @@ type Object2dParams = {
   velocity?: Vector2;
   maxVelocity?: number;
   audioMap?: Map<string, HTMLAudioElement>;
-}
+};
 
 export abstract class Object2d implements BaseObject {
   position: Vector2;
@@ -36,7 +36,7 @@ export abstract class Object2d implements BaseObject {
   // Audio map
 
   audioMap: Map<string, HTMLAudioElement>;
-  
+
   // Params for movement
 
   isMovable: boolean;
@@ -74,7 +74,7 @@ export abstract class Object2d implements BaseObject {
     isMovable = false,
     speed = 0,
     maxVelocity = 0,
-    velocity = new Vector2(0,0),
+    velocity = new Vector2(0, 0),
   }: Object2dParams) {
     this.position = position;
     this.nodes = nodes;
@@ -92,7 +92,7 @@ export abstract class Object2d implements BaseObject {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    this.nodes.forEach((node) => {  
+    this.nodes.forEach((node) => {
       ctx.strokeStyle = this.color;
 
       const nodeStart = this.getAbsolutePosition(node);
@@ -101,9 +101,7 @@ export abstract class Object2d implements BaseObject {
         ctx.beginPath();
         ctx.moveTo(nodeStart.x, nodeStart.y);
 
-        const destPosition = this.getAbsolutePosition(
-          this.nodes[destNode]
-        );
+        const destPosition = this.getAbsolutePosition(this.nodes[destNode]);
 
         ctx.lineTo(destPosition.x, destPosition.y);
         ctx.stroke();
