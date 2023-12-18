@@ -3,8 +3,11 @@ import { Node2 } from "../../../engine/classes/assets";
 
 const level1 = {
     id: 1,
-    nodes: [
-        // TODO nodes for lvl 1
+    outside: [
+
+    ],
+    inside: [
+        
     ]
 } as LevelType;
 
