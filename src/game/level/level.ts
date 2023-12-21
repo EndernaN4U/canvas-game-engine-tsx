@@ -22,6 +22,22 @@ class Level extends Object2d{
     onFrame(delta: number): void {
         
     }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        super.draw(ctx);
+        
+        // For level making: Show were nodes are
+        const drawCircle = (node: Node2, radius: number)=>{
+            ctx.beginPath();
+            const pos = this.getAbsolutePosition(node);
+            ctx.arc(pos.x, pos.y, radius, 0, 3 * Math.PI);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+
+        this.outside.forEach(node=>drawCircle(node, 3));
+        this.inside.forEach(node=>drawCircle(node, 2));
+    }
 }
 
 export { Level };
