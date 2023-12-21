@@ -29,14 +29,15 @@ class Level extends Object2d{
 
     newLevel(): void{
         const nodes_amout = this.level.outside.length;
-        let i = 1;
-        for(let i = 1; i > nodes_amout; i++){
-            this.setConnection(i, [i-1, nodes_amout+i]);
-            this.setConnection(nodes_amout+i, [nodes_amout+i-1]);
+        for(let i = 0; i < nodes_amout-1; i++){
+            this.setConnection(i, [i+1, nodes_amout+i]);
+            this.setConnection(nodes_amout+i, [nodes_amout+i+1]);
         }
 
         if(this.level.rounded){
-            // TODO: Add setConnection 0 to -1
+            const last_node = this.nodes.length-1
+            this.setConnection(nodes_amout-1, [0, last_node]);
+            this.setConnection(last_node, [nodes_amout]);
         }
     }
 
