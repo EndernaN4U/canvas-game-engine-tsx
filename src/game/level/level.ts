@@ -1,25 +1,29 @@
 import { Vector2 } from "../../engine";
 import { Node2, Object2d } from "../../engine/classes/assets";
 
-import type { LevelType } from "./levels_assets";
+import { level1, type LevelType } from "./levels_assets";
 import type { Connection } from "../../engine/classes/assets";
-import { level1 } from "./levels_assets";
+import { Player } from "../player/player";
 
 class Level extends Object2d{
     level: LevelType;
+    player: Player;
 
-    constructor(screenSize: Vector2){
+    constructor(screenSize: Vector2, level: LevelType){
         super({
             position: new Vector2(
                 screenSize.x / 2,
                 screenSize.y / 2
             ),
-            nodes: [...level1.outside, ...level1.inside],
+            nodes: [...level.outside, ...level.inside],
             color: "blue"
         });
 
-        this.level = level1;
+        
+        this.level = level;
         this.newLevel();
+
+        this.player = new Player(this);
     }
 
     setConnection(which: number, to: number[]): void{
@@ -47,7 +51,8 @@ class Level extends Object2d{
 
     draw(ctx: CanvasRenderingContext2D): void {
         super.draw(ctx);
-        
+        this.player.draw(ctx);    
+
         // For level making: Show were nodes are
         const drawCircle = (node: Node2, radius: number)=>{
             ctx.beginPath();

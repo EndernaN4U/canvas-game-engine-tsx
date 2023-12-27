@@ -3,13 +3,19 @@ import { Canvas, Engine2d, Vector2 } from '../engine';
 
 import { Level } from './level/level';
 
+import { level1 } from './level/levels_assets';
+
 class TempestGame extends Engine2d{
     screenSize: Vector2;
+    level: Level;
+
     constructor(){
         super();
+
         this.screenSize = new Vector2(window.innerWidth, window.innerHeight);
 
-        this.addObject(new Level(this.screenSize));
+        this.level = new Level(this.screenSize, level1);
+        this.addObject(this.level);
     }
 }
 
