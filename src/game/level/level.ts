@@ -51,7 +51,7 @@ class Level extends Object2d{
 
     draw(ctx: CanvasRenderingContext2D): void {
         super.draw(ctx);
-        this.player.draw(ctx);    
+        this.player.draw(ctx);
 
         // For level making: Show were nodes are
         const drawCircle = (node: Node2, radius: number)=>{
