@@ -50,7 +50,32 @@ class Level extends Object2d{
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        super.draw(ctx);
+        const player_pos = this.player.outside_position;
+        const pos_set = new Set([
+            player_pos,
+            player_pos == this.level.outside.length - 1 ?
+            0 : player_pos + 1
+        ])
+
+        this.nodes.forEach((node, ind) => {  
+      
+            const nodeStart = this.getAbsolutePosition(node);
+            
+            node.conects.forEach((destNode, destInd) => {
+                ctx.strokeStyle = destInd && pos_set.has(ind) ? "yellow" : this.color;
+
+                ctx.beginPath();
+                ctx.moveTo(nodeStart.x, nodeStart.y);
+        
+                const destPosition = this.getAbsolutePosition(
+                    this.nodes[destNode.id]
+                );
+        
+                ctx.lineTo(destPosition.x, destPosition.y);
+                ctx.stroke();
+            });
+        });
+
         this.player.draw(ctx);
 
         // For level making: Show were nodes are
