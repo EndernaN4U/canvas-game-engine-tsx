@@ -1,7 +1,7 @@
 import { Vector2 } from "../../engine";
 import { Node2, Object2d } from "../../engine/classes/assets";
 
-import { level1, type LevelType } from "./levels_assets";
+import type { LevelType } from "./assets";
 import type { Connection } from "../../engine/classes/assets";
 import { Player } from "../player/player";
 

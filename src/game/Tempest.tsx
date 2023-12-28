@@ -3,7 +3,7 @@ import { Canvas, Engine2d, Vector2 } from '../engine';
 
 import { Level } from './level/level';
 
-import { level1 } from './level/levels_assets';
+import { level1 } from './level/assets';
 
 class TempestGame extends Engine2d{
     screenSize: Vector2;
