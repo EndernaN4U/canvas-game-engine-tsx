@@ -1,6 +1,7 @@
 import { Vector2 } from "../../engine";
 import { Object2d } from "../../engine/classes/assets";
 import { Level } from "../level/level";
+import { player_body } from "./assets/player_body";
 
 class Player extends Object2d {
   hp: number;
@@ -11,7 +12,7 @@ class Player extends Object2d {
   lastMovement: number; 
 
   constructor(level: Level) {
-    super({ position: new Vector2(0, 0) });
+    super({ position: new Vector2(0, 0), nodes: player_body,color: 'yellow' } );
 
     this.hp = 2;
     this.level = level;
@@ -66,13 +67,14 @@ class Player extends Object2d {
     // TODO: Write calc rotation that change player position into looking at center of level
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
-    ctx.beginPath();
-    const pos = this.position;
-    ctx.arc(pos.x, pos.y, 20, 0, 3 * Math.PI);
-    ctx.fillStyle = "yellow";
-    ctx.fill();
-  }
+  // draw(ctx: CanvasRenderingContext2D): void {
+  //   ctx.beginPath();
+  //   // const pos = this.position;
+  //   // ctx.arc(pos.x, pos.y, 20, 0, 3 * Math.PI);
+    
+  //   ctx.fillStyle = "yellow";
+  //   ctx.fill();
+  // }
 }
 
 export { Player };
