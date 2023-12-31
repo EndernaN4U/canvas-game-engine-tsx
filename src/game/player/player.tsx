@@ -67,14 +67,6 @@ class Player extends Object2d {
     // TODO: Write calc rotation that change player position into looking at center of level
   }
 
-  // draw(ctx: CanvasRenderingContext2D): void {
-  //   ctx.beginPath();
-  //   // const pos = this.position;
-  //   // ctx.arc(pos.x, pos.y, 20, 0, 3 * Math.PI);
-    
-  //   ctx.fillStyle = "yellow";
-  //   ctx.fill();
-  // }
 }
 
 export { Player };

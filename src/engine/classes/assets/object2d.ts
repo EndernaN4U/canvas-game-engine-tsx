@@ -17,6 +17,10 @@ export class Node2 {
     // Change every connect into Connection type
     this.conects = conects.map(x => typeof x === "number" ? {id: x} : x);
   }
+
+  clone(){
+    return new Node2(this.position.x, this.position.y, JSON.parse(JSON.stringify(this.conects)));
+  }
 }
 
 type Object2dParams = {

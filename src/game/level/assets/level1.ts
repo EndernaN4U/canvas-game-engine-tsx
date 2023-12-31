@@ -23,25 +23,7 @@ const level1 = {
         new Node2(200, 200),
         new Node2(75, 110),
     ],
-    inside: [
-        new Node2(-15, 22),
-        new Node2(-40, 40),
-        new Node2(-75, 26),
-        new Node2(-86, 0),
-        new Node2(-86, -30),
-        new Node2(-70, -44),
-        new Node2(-40, -50),
-        new Node2(-15, -36),
-
-        new Node2(15, -36),
-        new Node2(40, -50),
-        new Node2(70, -44),
-        new Node2(86, -30),
-        new Node2(86, 0),
-        new Node2(75, 26),
-        new Node2(40, 40),
-        new Node2(15, 22),
-    ]
+    inside: []
 } as LevelType;
 
 
