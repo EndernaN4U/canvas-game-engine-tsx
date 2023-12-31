@@ -18,7 +18,6 @@ class Level extends Object2d{
             nodes: [...level.outside, ...level.inside],
             color: "blue"
         });
-
         
         this.level = level;
         this.newLevel();
@@ -50,6 +49,7 @@ class Level extends Object2d{
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        // TODO: Change draw method to custom one that could delete a need for newLevel
         const player_pos = this.player.outside_position;
         const pos_set = new Set([
             player_pos,

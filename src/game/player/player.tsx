@@ -23,6 +23,7 @@ class Player extends Object2d {
     this.outside_position = middle_ind;
 
     this.calcPosition();
+    this.calcRotation();
 
     window.addEventListener("keypress", (e) => {
       if(Date.now() - this.lastMovement < 45) return;   // Movement limiter ( 45ms beetwen movement )
@@ -39,6 +40,7 @@ class Player extends Object2d {
             break;
           }
         this.calcPosition();
+        this.calcRotation();
         this.lastMovement = Date.now();
     });
   }
@@ -64,7 +66,28 @@ class Player extends Object2d {
   }
 
   calcRotation(): void{
-    // TODO: Write calc rotation that change player position into looking at center of level
+    // TODO: Make a method for getting level outside nodes
+    const lvlType = this.level.level;
+    const length = lvlType.outside.length;
+
+    const index = this.outside_position;
+    const second_index = index == length - 1 ? 0 : this.outside_position + 1;
+
+    /*
+      Calculates diffrence of 2 nodes 
+      so we can calculate radians with formula
+      tan(x) = y / x
+    */
+   
+    const between = Vector2.between(
+      lvlType.outside[index].position,
+      lvlType.outside[second_index].position
+    );
+
+    const tan = between.y / between.x;
+    const rotation = Math.atan(tan) / Math.PI * 180  // Change radians to degrees
+    this.rotation = between.x < 0 ? 180 + rotation : rotation;  
+    // If diff.x is smaller from 0 then we need to rotate it
   }
 
 }
