@@ -1,5 +1,5 @@
 import { Vector2 } from "../../engine";
-import { Object2d } from "../../engine/classes/assets";
+import { Node2, Object2d } from "../../engine/classes/assets";
 import { Level } from "../level/level";
 import { player_body } from "./assets/player_body";
 
@@ -34,11 +34,11 @@ class Player extends Object2d {
           if (this.outside_position == 0) this.outside_position = last_index; // Movement guards
           else this.outside_position--;
           break;
-          case "d":
-            if (this.outside_position == last_index) this.outside_position = 0;
-            else this.outside_position++;
-            break;
-          }
+        case "d":
+          if (this.outside_position == last_index) this.outside_position = 0;
+          else this.outside_position++;
+          break;
+        }
         this.calcPosition();
         this.calcRotation();
         this.lastMovement = Date.now();
@@ -47,31 +47,44 @@ class Player extends Object2d {
 
   onFrame(): void {}
 
+  getIndexesAroundPlayer(): [number, number]{
+    const outside_array = this.level.level.outside;
+    const outside_len = outside_array.length;
+
+    const second_index = this.outside_position == outside_len - 1 ? 0 : this.outside_position + 1;
+    
+    return [
+      this.outside_position,
+      second_index
+    ]
+  }
+
+  getNodesAroundPlayer(): [Node2, Node2]{
+    const outside_array = this.level.level.outside;
+    const [ind1, ind2] = this.getIndexesAroundPlayer();
+
+    return [
+      outside_array[ind1],
+      outside_array[ind2]
+    ]
+  }
+
   calcPosition(): void {
-    const lvlType = this.level.level;
-    const length = lvlType.outside.length;
+    const [node1, node2] = this.getNodesAroundPlayer();
 
-    const index = this.outside_position;
-    const second_index = index == length - 1 ? 0 : this.outside_position + 1;
-
-    this.position = lvlType.outside[index].position
+    this.position = node1.position
     .clone() // Clone position of first outside node
     .translate(this.level.position) // Translate it by level object position
     .translate(
       Vector2.between(
-        lvlType.outside[index].position,
-        lvlType.outside[second_index].position
+        node1.position,
+        node2.position
       ).multiplyBy(0.5)
     ); // Translate it by middle point of 2 nodes
   }
 
   calcRotation(): void{
-    // TODO: Make a method for getting level outside nodes
-    const lvlType = this.level.level;
-    const length = lvlType.outside.length;
-
-    const index = this.outside_position;
-    const second_index = index == length - 1 ? 0 : this.outside_position + 1;
+    const [node1, node2] = this.getNodesAroundPlayer();
 
     /*
       Calculates diffrence of 2 nodes 
@@ -80,14 +93,14 @@ class Player extends Object2d {
     */
    
     const between = Vector2.between(
-      lvlType.outside[index].position,
-      lvlType.outside[second_index].position
+      node1.position,
+      node2.position
     );
 
     const tan = between.y / between.x;
     const rotation = Math.atan(tan) / Math.PI * 180  // Change radians to degrees
     this.rotation = between.x < 0 ? 180 + rotation : rotation;  
-    // If diff.x is smaller from 0 then we need to rotate it
+    // If between.x is smaller from 0 then we need to rotate it
   }
 
 }
