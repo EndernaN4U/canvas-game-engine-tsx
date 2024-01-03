@@ -6,7 +6,7 @@ export class Node2 {
   conects: number[];
   position: Vector2;
 
-  constructor(x: number, y: number, conects: number[]) {
+  constructor(x: number, y: number, conects: number[] = []) {
     this.position = new Vector2(x, y);
     this.conects = conects;
   }
