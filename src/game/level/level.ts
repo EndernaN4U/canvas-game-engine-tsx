@@ -15,65 +15,55 @@ class Level extends Object2d{
                 screenSize.x / 2,
                 screenSize.y / 2
             ),
-            nodes: [...level.outside, ...level.inside],
+            nodes: [],
             color: "blue"
         });
         
         this.level = level;
-        this.newLevel();
 
         this.player = new Player(this);
-    }
-
-    setConnection(which: number, to: number[]): void{
-        this.nodes[which].conects =
-            to.map(node=>({id: node} as Connection));
-    }
-
-    newLevel(): void{
-        const nodes_amout = this.level.outside.length;
-        for(let i = 0; i < nodes_amout-1; i++){
-            this.setConnection(i, [i+1, nodes_amout+i]);
-            this.setConnection(nodes_amout+i, [nodes_amout+i+1]);
-        }
-
-        if(this.level.rounded){
-            const last_node = this.nodes.length-1
-            this.setConnection(nodes_amout-1, [0, last_node]);
-            this.setConnection(last_node, [nodes_amout]);
-        }
     }
 
     onFrame(delta: number): void {
         
     }
 
+    drawLine(ctx: CanvasRenderingContext2D, vec1: Vector2, vec2: Vector2, color = this.color){
+        ctx.strokeStyle = color;
+        
+        ctx.beginPath();
+        ctx.moveTo(vec1.x, vec1.y);
+        ctx.lineTo(vec2.x, vec2.y);
+        ctx.stroke();
+    }
+
     draw(ctx: CanvasRenderingContext2D): void {
-        // TODO: Change draw method to custom one that could delete a need for newLevel
-        const player_pos = this.player.outside_position;
-        const pos_set = new Set([
-            player_pos,
-            player_pos == this.level.outside.length - 1 ?
-            0 : player_pos + 1
-        ])
+        const pos_set = new Set(this.player.getIndexesAroundPlayer())
 
-        this.nodes.forEach((node, ind) => {  
-      
-            const nodeStart = this.getAbsolutePosition(node);
+        this.level.outside.forEach((node: Node2, ind: number)=>{
+            if(!ind && !this.level.rounded) return;
+            const vec_start = this.getAbsolutePosition(node);
+
+            const vec_inside = this.getAbsolutePosition(
+                this.level.inside[ind]
+            );
+
+            this.drawLine(ctx, vec_start, vec_inside, pos_set.has(ind) ? "yellow" : this.color);
             
-            node.conects.forEach((destNode, destInd) => {
-                ctx.strokeStyle = destInd && pos_set.has(ind) ? "yellow" : this.color;
+            const vec_before = this.getAbsolutePosition(
+                this.level.outside[ind-1] ||
+                this.level.outside[this.level.outside.length-1]
+            );
 
-                ctx.beginPath();
-                ctx.moveTo(nodeStart.x, nodeStart.y);
-        
-                const destPosition = this.getAbsolutePosition(
-                    this.nodes[destNode.id]
-                );
-        
-                ctx.lineTo(destPosition.x, destPosition.y);
-                ctx.stroke();
-            });
+            this.drawLine(ctx, vec_start, vec_before);
+
+            const vec_inside_bef = this.getAbsolutePosition(
+                this.level.inside[ind - 1] ||
+                this.level.inside[this.level.inside.length-1]
+            );
+
+            this.drawLine(ctx, vec_inside, vec_inside_bef);
+
         });
 
         this.player.draw(ctx);
