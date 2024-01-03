@@ -41,15 +41,16 @@ class Level extends Object2d{
         const pos_set = new Set(this.player.getIndexesAroundPlayer())
 
         this.level.outside.forEach((node: Node2, ind: number)=>{
-            if(!ind && !this.level.rounded) return;
             const vec_start = this.getAbsolutePosition(node);
-
+            
             const vec_inside = this.getAbsolutePosition(
                 this.level.inside[ind]
             );
 
             this.drawLine(ctx, vec_start, vec_inside, pos_set.has(ind) ? "yellow" : this.color);
-            
+
+            if(!ind && !this.level.rounded) return;
+
             const vec_before = this.getAbsolutePosition(
                 this.level.outside[ind-1] ||
                 this.level.outside[this.level.outside.length-1]

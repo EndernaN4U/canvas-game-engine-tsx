@@ -9,10 +9,10 @@ class Player extends Object2d {
   level: Level;
   outside_position: number;
 
-  lastMovement: number; 
+  lastMovement: number;
 
   constructor(level: Level) {
-    super({ position: new Vector2(0, 0), nodes: player_body,color: 'yellow' } );
+    super({ position: new Vector2(0, 0), nodes: player_body, color: "yellow" });
 
     this.hp = 2;
     this.level = level;
@@ -26,64 +26,63 @@ class Player extends Object2d {
     this.calcRotation();
 
     window.addEventListener("keypress", (e) => {
-      if(Date.now() - this.lastMovement < 45) return;   // Movement limiter ( 45ms beetwen movement )
+      if (Date.now() - this.lastMovement < 45) return; // Movement limiter ( 45ms beetwen movement )
       const last_index = this.level.level.outside.length - 1;
-      
+
       switch (e.key) {
         case "a":
-          if (this.outside_position == 0) this.outside_position = last_index; // Movement guards
-          else this.outside_position--;
-          break;
-        case "d":
-          if (this.outside_position == last_index) this.outside_position = 0;
+          if (this.outside_position == last_index && level.level.rounded)
+            this.outside_position = 0;
+          else if (
+            this.outside_position == last_index - 1 &&
+            !level.level.rounded
+          )
+            return;
           else this.outside_position++;
           break;
-        }
-        this.calcPosition();
-        this.calcRotation();
-        this.lastMovement = Date.now();
+        case "d":
+          if (this.outside_position == 0) {
+            if (level.level.rounded) this.outside_position = last_index; // Movement guards
+          } else this.outside_position--;
+          break;
+      }
+      this.calcPosition();
+      this.calcRotation();
+      this.lastMovement = Date.now();
     });
   }
 
   onFrame(): void {}
 
-  getIndexesAroundPlayer(): [number, number]{
+  getIndexesAroundPlayer(): [number, number] {
     const outside_array = this.level.level.outside;
     const outside_len = outside_array.length;
 
-    const second_index = this.outside_position == outside_len - 1 ? 0 : this.outside_position + 1;
-    
-    return [
-      this.outside_position,
-      second_index
-    ]
+    const second_index =
+      this.outside_position == outside_len - 1 ? 0 : this.outside_position + 1;
+
+    return [this.outside_position, second_index];
   }
 
-  getNodesAroundPlayer(): [Node2, Node2]{
+  getNodesAroundPlayer(): [Node2, Node2] {
     const outside_array = this.level.level.outside;
     const [ind1, ind2] = this.getIndexesAroundPlayer();
 
-    return [
-      outside_array[ind1],
-      outside_array[ind2]
-    ]
+    return [outside_array[ind1], outside_array[ind2]];
   }
 
   calcPosition(): void {
     const [node1, node2] = this.getNodesAroundPlayer();
 
     this.position = node1.position
-    .clone() // Clone position of first outside node
-    .translate(this.level.position) // Translate it by level object position
-    .translate(
-      Vector2.between(
-        node1.position,
-        node2.position
-      ).multiplyBy(0.5)
-    ); // Translate it by middle point of 2 nodes
+      .clone() // Clone position of first outside node
+      .translate(this.level.position) // Translate it by level object position
+      .translate(
+        Vector2.between(node1.position, node2.position).multiplyBy(0.5)
+      ); // Translate it by middle point of 2 nodes
   }
 
-  calcRotation(): void{
+  calcRotation(): void {
     const [node1, node2] = this.getNodesAroundPlayer();
 
     /*
@@ -91,18 +90,14 @@ class Player extends Object2d {
       so we can calculate radians with formula
       tan(x) = y / x
     */
-   
-    const between = Vector2.between(
-      node1.position,
-      node2.position
-    );
+
+    const between = Vector2.between(node1.position, node2.position);
 
     const tan = between.y / between.x;
-    const rotation = Math.atan(tan) / Math.PI * 180  // Change radians to degrees
-    this.rotation = between.x < 0 ? 180 + rotation : rotation;  
+    const rotation = (Math.atan(tan) / Math.PI) * 180; // Change radians to degrees
+    this.rotation = between.x < 0 ? 180 + rotation : rotation;
     // If between.x is smaller from 0 then we need to rotate it
   }
-
 }
 
 export { Player };
