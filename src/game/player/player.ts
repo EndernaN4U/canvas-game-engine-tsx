@@ -8,9 +8,9 @@ class Player extends Object2d{
     rotationSpeed: number;
     
     constructor(){
-        super({nodes: player_body, position: new Vector2(0,0), speed: 1});
+        super({nodes: player_body, position: new Vector2(0,0), speed: 0.001, maxVelocity: 5});
         this.keysSet = new Set();
-        this.rotationSpeed = 1;
+        this.rotationSpeed = 0.25;
 
         window.addEventListener("keypress", (e)=>{
             this.keysSet.add(e.key);
@@ -20,13 +20,28 @@ class Player extends Object2d{
         })
     }
 
-    onFrame(delta: number): void {
-        // y -= this.keysSet.has("w") ? this.speed : 0;
+    traction(delta: number): void{
+        const   multx = this.velocity.x >= 0 ? 1 : -1,
+                multy = this.velocity.y >= 0 ? 1 : -1;
         
-        this.rotation -= this.keysSet.has("a") ? this.rotationSpeed : 0;
-        this.rotation += this.keysSet.has("d") ? this.rotationSpeed : 0;
-        // S0cha TODO: Dodaj movement oparty na velocity
-        //this.position.translate(new Vector2(x*delta, y*delta));rp
+        const traction = this.speed / 5 * delta;
+        this.velocity.x = (Math.abs(this.velocity.x) - traction)*multx;
+        this.velocity.y = (Math.abs(this.velocity.y) - traction)*multy;
+          
+    }
+
+    onFrame(delta: number): void {
+        this.velocity.x += this.keysSet.has("w") ? this.speed * delta * Math.sin(this.rotation * Math.PI / 180 - 90) : 0;
+        this.velocity.y += this.keysSet.has("w") ? this.speed * delta * -Math.cos(this.rotation * Math.PI / 180 - 90) : 0;
+
+        this.traction(delta);
+        
+        this.rotation -= this.keysSet.has("a") ? this.rotationSpeed * delta : 0;
+        this.rotation += this.keysSet.has("d") ? this.rotationSpeed * delta : 0;
+        this.position.translate(this.velocity);
+
+        if(this.position.x >= 1500) this.position.x = 0;
+        else if(this.position.x <= 0) this.position.x = 1500;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {

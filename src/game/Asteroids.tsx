@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import { Canvas, Vector2 } from "../engine";
 import { Engine2d } from "../engine";
-import { player } from "./player/Player";
+import { player } from "./player/player";
+import { obstacle } from "./obstacles/obstacle";
 
 class AsteroidsGame extends Engine2d{
     screenSize: Vector2; 
@@ -10,6 +11,9 @@ class AsteroidsGame extends Engine2d{
         this.screenSize = new Vector2(screen.width, screen.height);
         this.addObject(player);
         player.position = this.screenSize.clone().multiplyBy(.5);
+        this.addObject(obstacle);
+        obstacle.position = this.screenSize.clone().multiplyBy(.5);
+
     }
 }
 
