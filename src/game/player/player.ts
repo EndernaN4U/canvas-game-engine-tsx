@@ -1,19 +1,26 @@
 import { Vector2 } from "../../engine";
 import { Object2d } from "../../engine/classes/assets";
 import { Node2 } from "../../engine/classes/assets";
+import { Bullet } from "./bullet";
 import player_body from "./player_body";
 
 class Player extends Object2d{
     keysSet: Set<string>;
     rotationSpeed: number;
+    bullets: Array<Bullet>
     
     constructor(){
         super({nodes: player_body, position: new Vector2(0,0), speed: 0.001, maxVelocity: 5});
         this.keysSet = new Set();
         this.rotationSpeed = 0.25;
+        this.bullets = [];
 
         window.addEventListener("keypress", (e)=>{
             this.keysSet.add(e.key);
+            
+            if(e.key === " "){
+                this.bullets.push(new Bullet(this.position.clone(), this.rotation));
+            }
         })
         window.addEventListener("keyup", (e)=>{
             this.keysSet.delete(e.key);
@@ -27,18 +34,19 @@ class Player extends Object2d{
         const traction = this.speed / 5 * delta;
         this.velocity.x = (Math.abs(this.velocity.x) - traction)*multx;
         this.velocity.y = (Math.abs(this.velocity.y) - traction)*multy;
-          
     }
 
     onFrame(delta: number): void {
-        this.velocity.x += this.keysSet.has("w") ? this.speed * delta * Math.sin(this.rotation * Math.PI / 180 - 90) : 0;
-        this.velocity.y += this.keysSet.has("w") ? this.speed * delta * -Math.cos(this.rotation * Math.PI / 180 - 90) : 0;
+        this.velocity.x += this.keysSet.has("w") ? this.speed * delta * Math.sin(this.rotation * Math.PI / 180 - Math.PI / 2) : 0;
+        this.velocity.y += this.keysSet.has("w") ? this.speed * delta * -Math.cos(this.rotation * Math.PI / 180 - Math.PI / 2) : 0;
 
         this.traction(delta);
         
         this.rotation -= this.keysSet.has("a") ? this.rotationSpeed * delta : 0;
         this.rotation += this.keysSet.has("d") ? this.rotationSpeed * delta : 0;
         this.position.translate(this.velocity);
+
+        this.bullets.forEach(bullet=>bullet.onFrame(delta));
 
         if(this.position.x >= 1500) this.position.x = 0;
         else if(this.position.x <= 0) this.position.x = 1500;
@@ -55,6 +63,7 @@ class Player extends Object2d{
         }
         // this.nodes.forEach(n => drawCircle(n))
         drawCircle(new Node2(0,0), 4, "blue");
+        this.bullets.forEach(bullet=>bullet.draw(ctx));
     }
 }
 const player = new Player();
